@@ -68,5 +68,13 @@ pub fn extract_flash_algo(buffer: &Vec<u8>) -> Result<FlashAlgorithm, AlgorithmP
         }
     }
 
+    use scroll::{ctx, Pread, LE};
+    let blob: Vec<u32> = blob
+        .chunks(4)
+        .map(|bytes| bytes.pread(0).unwrap())
+        .collect();
+
+    algo.instructions = blob;
+
     Ok(algo)
 }

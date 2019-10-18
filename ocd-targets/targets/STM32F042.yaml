@@ -3,7 +3,7 @@ manufacturer:
   cc: 0x02
   id: 0x44
 part: 0x000001
-flash_algorithm: "algorithms/STM32F042.yaml"
+flash_algorithm: "STM32F042.yaml"
 memory_map:
     - Flash:
         range:

@@ -108,7 +108,7 @@ impl MasterProbe {
 
             let mut select = Select(0);
 
-            debug!(
+            log::trace!(
                 "Changing AP to {}, AP_BANK_SEL to {}",
                 self.current_apsel, self.current_apbanksel
             );
@@ -137,7 +137,7 @@ impl MasterProbe {
     {
         let register_value = register.into();
 
-        debug!(
+        log::trace!(
             "Writing register {}, value=0x{:08X}",
             REGISTER::NAME,
             register_value
@@ -163,7 +163,7 @@ impl MasterProbe {
         AP: AccessPort,
         REGISTER: APRegister<AP>,
     {
-        debug!("Reading register {}", REGISTER::NAME);
+        log::trace!("Reading register {}", REGISTER::NAME);
         self.select_ap_and_ap_bank(port.get_port_number(), REGISTER::APBANKSEL)?;
 
         let link = &mut self.actual_probe;
@@ -173,7 +173,7 @@ impl MasterProbe {
             u16::from(REGISTER::ADDRESS),
         )?;
 
-        debug!(
+        log::trace!(
             "Read register    {}, value=0x{:08x}",
             REGISTER::NAME,
             result

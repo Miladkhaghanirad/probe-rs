@@ -5,7 +5,7 @@ manufacturer:
   cc: 0x02
   id: 0x44
 part: 0x000001
-flash_algorithm: "ATSAMC_32.FLM" #LPC8N04.FLM
+flash_algorithm: "LPC8xx_32.FLM"
 memory_map:
     - Flash:
         range:

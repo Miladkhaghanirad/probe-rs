@@ -105,7 +105,7 @@ fn main() {
                 ].into_iter().collect();
 
                 static ref FLASH_ALGORITHMS_ELF: HashMap<&'static str, &'static [u8]> = vec![
-                    #((#algorithm_names_elf, include_bytes!(concat!(env!("CARGO_MANIFEST_DIR"), #algorithm_files_elf))),)*
+                    #((#algorithm_names_elf, &include_bytes!(concat!(env!("CARGO_MANIFEST_DIR"), #algorithm_files_elf))[..]),)*
                 ].into_iter().collect();
 
                 static ref TARGETS: HashMap<&'static str, &'static str> = vec![
