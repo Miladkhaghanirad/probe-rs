@@ -52,10 +52,18 @@ pub fn get_built_in_algorithm(
     name: impl AsRef<str>,
 ) -> Result<FlashAlgorithm, AlgorithmSelectionError> {
     let name = name.as_ref().to_string();
-    FLASH_ALGORITHMS
+    let str_try = FLASH_ALGORITHMS_STR
         .get(&name[..])
-        .ok_or(AlgorithmSelectionError::AlgorithmNotFound(name))
-        .and_then(|definition| FlashAlgorithm::new(definition).map_err(From::from))
+        .ok_or(AlgorithmSelectionError::AlgorithmNotFound(name.clone()))
+        .and_then(|definition| FlashAlgorithm::new_from_str(definition).map_err(From::from));
+
+    str_try
+        .or_else(|_e| {
+            FLASH_ALGORITHMS_ELF
+                .get(&name[..])
+                .ok_or(AlgorithmSelectionError::AlgorithmNotFound(name))
+                .and_then(|definition| FlashAlgorithm::new_from_elf(&definition.to_vec()).map_err(From::from))
+        })
 }
 
 pub fn select_algorithm(name: impl AsRef<str>) -> Result<FlashAlgorithm, AlgorithmSelectionError> {

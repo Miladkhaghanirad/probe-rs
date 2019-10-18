@@ -63,6 +63,9 @@ fn main() {
 }
 
 fn main_try() -> Result<(), failure::Error> {
+    // Initialize the logging backend.
+    pretty_env_logger::init();
+    
     let mut args = std::env::args();
     // Skip the first arg which is the calling application name.
     let _ = args.next();

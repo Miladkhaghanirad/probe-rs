@@ -95,11 +95,25 @@ pub struct FlashAlgorithm {
     pub analyzer_address: u32,
 }
 
-pub type AlgorithmParseError = serde_yaml::Error;
+#[derive(Debug)]
+pub enum AlgorithmParseError {
+    Serde(serde_yaml::Error),
+    Elf,
+}
+
+impl From<serde_yaml::Error> for AlgorithmParseError {
+    fn from(error: serde_yaml::Error) -> Self {
+        AlgorithmParseError::Serde(error)
+    }
+}
 
 impl FlashAlgorithm {
-    pub fn new(definition: &str) -> Result<Self, AlgorithmParseError> {
-        serde_yaml::from_str(definition)
+    pub fn new_from_str(definition: &str) -> Result<Self, AlgorithmParseError> {
+        serde_yaml::from_str(definition).map_err(From::from)
+    }
+
+    pub fn new_from_elf(definition: &Vec<u8>) -> Result<Self, AlgorithmParseError> {
+        parser::extract_flash_algo(definition)
     }
 }
 
