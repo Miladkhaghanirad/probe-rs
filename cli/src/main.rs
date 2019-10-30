@@ -76,7 +76,7 @@ enum CLI {
         shared: SharedOptions,
 
         /// The address of the memory to dump from the target (in hexadecimal without 0x prefix)
-        #[structopt(parse(try_from_str = "parse_hex"))]
+        #[structopt(parse(try_from_str = parse_hex))]
         loc: u32,
         /// The amount of memory (in words) to dump
         words: u32,
@@ -96,7 +96,7 @@ enum CLI {
         shared: SharedOptions,
 
         /// The address of the memory to dump from the target (in hexadecimal without 0x prefix)
-        #[structopt(parse(try_from_str = "parse_hex"))]
+        #[structopt(parse(try_from_str = parse_hex))]
         loc: u32,
     },
 }
