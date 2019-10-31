@@ -20,3 +20,4 @@ pub mod memory;
 pub mod probe;
 pub mod session;
 pub mod target;
+pub mod config;
