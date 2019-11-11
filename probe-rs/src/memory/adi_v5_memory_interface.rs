@@ -162,11 +162,16 @@ impl ADIMemoryInterface {
         let csw = self.build_csw_register(DataSize::U32);
         self.write_register_ap(debug_port, csw)?;
 
-        let tar = TAR { address };
-        self.write_register_ap(debug_port, tar)?;
+        let mut offset = 0;
 
         for data in data.iter_mut() {
+            let tar = TAR {
+                address: address + offset,
+            };
+            self.write_register_ap(debug_port, tar)?;
+
             *data = self.read_register_ap(debug_port, DRW::default())?.data;
+            offset += 4;
         }
 
         Ok(())
@@ -349,12 +354,16 @@ impl ADIMemoryInterface {
 
         self.write_register_ap(debug_port, csw)?;
 
-        let tar = TAR { address };
-        self.write_register_ap(debug_port, tar)?;
-
+        let mut offset = 0;
         for data in data.iter() {
+            let tar = TAR {
+                address: address + offset,
+            };
+            self.write_register_ap(debug_port, tar)?;
+
             let drw = DRW { data: *data };
             self.write_register_ap(debug_port, drw)?;
+            offset += 4;
         }
 
         Ok(())

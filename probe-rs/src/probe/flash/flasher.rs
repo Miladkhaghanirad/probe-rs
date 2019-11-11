@@ -311,17 +311,20 @@ impl<'a> Flasher<'a> {
             "Loading algorithm into RAM at address 0x{:08x}",
             algo.load_address
         );
-        for i in 0..algo.instructions.len() {
-            algo.instructions[i] = i as u32;
-        }
+        //algo.instructions = vec![0; 128];
+        //for i in 0..algo.instructions.len() {
+        //    algo.instructions[i] = i as u32;
+        //}
+        println!("{:?}", algo.instructions);
         flasher
             .probe
             .write_block32(algo.load_address, algo.instructions.as_slice())?;
 
         let mut data = vec![0; algo.instructions.len()];
         flasher.probe.read_block32(algo.load_address, &mut data)?;
+        println!("{:?}", data);
 
-        log::debug!("Flashing {} bytes.", algo.instructions.len());
+        log::debug!("Flashing {} words.", algo.instructions.len());
         assert_eq!(&algo.instructions, &data.as_slice());
         log::debug!("RAM contents match flashing algo blob.");
 
@@ -339,6 +342,8 @@ impl<'a> Flasher<'a> {
             double_buffering_supported: flasher.double_buffering_supported,
             _operation: core::marker::PhantomData,
         };
+
+        //assert!(false, "aborting due to debugging");
 
         flasher.init(address, clock)?;
 

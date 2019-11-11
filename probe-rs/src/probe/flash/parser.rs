@@ -1,5 +1,5 @@
-use crate::probe::flash::flasher::FlashAlgorithm;
 use crate::probe::flash::flasher::AlgorithmParseError;
+use crate::probe::flash::flasher::FlashAlgorithm;
 use crate::probe::flash::memory::MemoryRange;
 
 use goblin::elf::program_header::*;
@@ -63,12 +63,12 @@ pub fn extract_flash_algo(buffer: &Vec<u8>) -> Result<FlashAlgorithm, AlgorithmP
                 "EraseChip" => algo.pc_erase_all = Some(sym.st_value as u32),
                 "EraseSector" => algo.pc_erase_sector = sym.st_value as u32,
                 "ProgramPage" => algo.pc_program_page = sym.st_value as u32,
-                _ => {},
+                _ => {}
             }
         }
     }
 
-    use scroll::{ctx, Pread, LE};
+    use scroll::Pread;
     let blob: Vec<u32> = blob
         .chunks(4)
         .map(|bytes| bytes.pread(0).unwrap())

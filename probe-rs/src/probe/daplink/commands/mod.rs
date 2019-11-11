@@ -5,7 +5,6 @@ pub mod transfer;
 
 use crate::probe::debug_probe::DebugProbeError;
 use core::ops::Deref;
-use log::trace;
 
 pub(crate) type Result<T> = std::result::Result<T, Error>;
 
