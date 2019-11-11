@@ -250,7 +250,7 @@ impl<'a> Flasher<'a> {
     ) -> Result<ActiveFlasher<'b, O>, FlasherError> {
         log::debug!("Initializing the flash algorithm.");
         let flasher = self;
-        let algo = flasher.flash_algorithm;
+        let mut algo = flasher.flash_algorithm.clone();
 
         use capstone::arch::*;
         let cs = capstone::Capstone::new()
@@ -311,6 +311,9 @@ impl<'a> Flasher<'a> {
             "Loading algorithm into RAM at address 0x{:08x}",
             algo.load_address
         );
+        for i in 0..algo.instructions.len() {
+            algo.instructions[i] = i as u32;
+        }
         flasher
             .probe
             .write_block32(algo.load_address, algo.instructions.as_slice())?;
@@ -318,6 +321,7 @@ impl<'a> Flasher<'a> {
         let mut data = vec![0; algo.instructions.len()];
         flasher.probe.read_block32(algo.load_address, &mut data)?;
 
+        log::debug!("Flashing {} bytes.", algo.instructions.len());
         assert_eq!(&algo.instructions, &data.as_slice());
         log::debug!("RAM contents match flashing algo blob.");
 
